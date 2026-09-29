@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="en" data-theme="light" style="color-scheme: light;"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ad Report App</title>
+<style>
+:root{--bg:#f5f6fa;--card:#fff;--tx:#1c2033;--mut:#6b7190;--bd:#e3e6f0;--ac:#3b5bdb;--acx:#fff;--hd:#eef1fb;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#12141c;--card:#1b1f2b;--tx:#e8eaf3;--mut:#9aa0bc;--bd:#2b3042;--ac:#7c93ff;--acx:#0f1220;--hd:#232840}}
+:root[data-theme="dark"]{--bg:#12141c;--card:#1b1f2b;--tx:#e8eaf3;--mut:#9aa0bc;--bd:#2b3042;--ac:#7c93ff;--acx:#0f1220;--hd:#232840}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.wrap{max-width:960px;margin:0 auto;padding:20px 16px 48px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:20px;margin-bottom:18px}
+h1{font-size:22px;margin:0 0 4px}
+.sub{color:var(--mut);margin:0 0 4px}
+h2{font-size:15px;margin:0 0 12px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
+label{display:block;font-size:12px;color:var(--mut);margin-bottom:4px}
+input,select{width:100%;padding:8px 10px;border:1px solid var(--bd);border-radius:8px;background:var(--bg);color:var(--tx);font:inherit}
+button{font:inherit;cursor:pointer;border-radius:8px;border:1px solid var(--bd);background:var(--card);color:var(--tx);padding:8px 14px}
+button.pri{background:var(--ac);color:var(--acx);border-color:var(--ac);font-weight:600}
+.sc{overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:560px}
+th,td{padding:10px 12px;text-align:right;border-bottom:1px solid var(--bd);white-space:nowrap}
+th:first-child,td:first-child{text-align:left}
+th{background:var(--hd);font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--mut)}
+tfoot td{font-weight:700;background:var(--hd);border-bottom:0}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:16px 0}
+.kpi{border:1px solid var(--bd);border-radius:12px;padding:12px 14px}
+.kpi b{display:block;font-size:20px}
+.kpi span{font-size:12px;color:var(--mut)}
+.badge{display:inline-block;background:var(--hd);border-radius:999px;padding:4px 12px;font-size:13px;margin-top:8px}
+.erow{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr 1.6fr auto;gap:8px;align-items:end;margin-bottom:8px}
+@media (max-width:640px){.erow{grid-template-columns:1fr 1fr}.erow>:first-child{grid-column:1/-1}}
+.bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:12px}
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;padding:16px;z-index:50}.md{background:var(--card);color:var(--tx);border:1px solid var(--bd);border-radius:14px;padding:20px;width:100%;max-width:520px;max-height:90vh;overflow:auto}.btn{display:inline-block;text-decoration:none;border:1px solid var(--bd);border-radius:8px;padding:8px 14px;color:var(--tx)}textarea{font:12px/1.4 ui-monospace,Menlo,Consolas,monospace;padding:8px;border:1px solid var(--bd);border-radius:8px;background:var(--bg);color:var(--tx)}
+.note{font-size:13px;color:var(--mut)}
+.mtoolbar{display:flex;align-items:center;gap:10px;padding:4px 4px 12px;flex-wrap:wrap}
+.mpill{background:var(--hd);border:1px solid var(--bd);border-radius:6px;padding:6px 12px;font-size:13px;font-weight:600;white-space:nowrap}
+.msearch{flex:1;min-width:140px;border:none;background:transparent;font-size:13px;color:var(--mut);padding:6px 4px}
+.mdate{margin-left:auto;border:1px solid var(--bd);border-radius:6px;padding:6px 12px;font-size:13px;display:flex;align-items:center;gap:6px;white-space:nowrap;background:var(--card)}
+.mtoolbar2{display:flex;align-items:center;gap:8px;padding:10px 4px;border-top:1px solid var(--bd);border-bottom:1px solid var(--bd);flex-wrap:wrap}
+.mbtn{border:1px solid var(--bd);border-radius:6px;padding:6px 12px;font-size:13px;background:var(--card);color:var(--tx);display:inline-flex;align-items:center;gap:6px}
+.mtoolbar2 .sp{margin-left:auto;display:flex;gap:8px}
+.mtable{width:100%;border-collapse:collapse;min-width:640px}
+.mtable th{padding:12px 14px;text-align:left;font-size:13px;font-weight:600;border-bottom:2px solid var(--bd);color:var(--tx);white-space:nowrap;background:none;text-transform:none;letter-spacing:normal}
+.mtable th .ic{color:var(--mut);margin-right:6px;font-weight:400}
+.mtable th .ch{color:var(--mut);margin-left:4px;font-weight:400;font-size:11px}
+.mtable td{padding:14px;text-align:left;font-size:14px;border-bottom:1px solid var(--bd);white-space:nowrap}
+.mtable tfoot td{border-bottom:none;padding-top:16px}
+.mtotal-n{font-size:14px;font-weight:700;display:block}
+.mtotal-s{font-size:12px;color:var(--mut);display:block;margin-top:2px;font-weight:400}
+.mtotal-a{font-weight:700;font-size:14px;max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mdaterow{display:flex;justify-content:flex-end;padding:0 2px 10px}
+.mdate2{font-size:13px;color:var(--tx);display:inline-flex;align-items:center;gap:6px}
+.mtable2{width:100%;border-collapse:collapse;min-width:640px;table-layout:fixed}
+.mtable2 th{background:var(--hd);text-align:left;padding:10px 14px;font-size:13px;font-weight:700;border-bottom:1px solid var(--bd);white-space:nowrap;color:var(--tx);text-transform:none;letter-spacing:normal}
+.mtable2 th .ic{color:var(--mut);margin-right:6px;font-weight:400}
+.mtable2 td{padding:10px 14px;font-size:13px;text-align:left;border-bottom:1px solid var(--bd);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mtable2 tfoot tr{background:var(--card)}
+.mtable2 tfoot td{border-bottom:none;padding-top:10px;padding-bottom:10px}
+.mtable2 th{position:relative}
+.rsz{position:absolute;top:0;right:-4px;width:8px;height:100%;cursor:col-resize;z-index:2;touch-action:none}
+.rsz:hover,.rsz:active{background:var(--ac);opacity:.35}
+.mdaterow{display:flex;justify-content:flex-end;align-items:center;gap:8px;padding:0 2px 10px}
+.mbtn2{border:1px solid var(--bd);background:var(--card);color:var(--tx);border-radius:8px;width:32px;height:32px;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;font-size:15px;padding:0}
+.mbtn2:hover{background:var(--hd)}
+</style>
+</head>
+<body>
+<div class="wrap"><div id="root"></div></div>
+<script id="data" type="application/json">{"title":"Ad Performance Report","dateFrom":"2026-09-10","dateTo":"2026-09-03","currency":"USD","rows":[{"name":"","reach":"23432","impr":"32423","spent":"2334"}]}</script>
+<script>
+(function(){
+var ARTURL='https://claude.ai/artifact/WZfhBhU8K56wQi5e5CmpA7',STANDALONE=false,VIEWERONLY=true,dlcap=null,colWidths=[null,null,null,null,null];
+var S=JSON.parse(document.getElementById('data').textContent);
+if(STANDALONE){try{var _l=localStorage.getItem('adrep');if(_l)S=JSON.parse(_l)}catch(e){}}
+function persist(){if(STANDALONE){try{localStorage.setItem('adrep',JSON.stringify(S))}catch(e){}}}
+var canEdit=false, art=null, root=document.getElementById('root');
+function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function n(v){v=parseFloat(v);return isFinite(v)?v:0}
+function fmtN(v){return new Intl.NumberFormat('en-US',{maximumFractionDigits:0}).format(v)}
+function fmtF(v){return new Intl.NumberFormat('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}).format(v)}
+function fmtM(v){return S.currency==='USD'?new Intl.NumberFormat('en-US',{style:'currency',currency:'USD'}).format(v):new Intl.NumberFormat('en-US',{style:'currency',currency:'VND',maximumFractionDigits:0}).format(v)}
+function fmtD(s){if(!s)return '';var p=s.split('-');if(p.length!==3)return s;var m=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];return p[2]+' '+m[+p[1]-1]+' '+p[0]}
+function freq(i,r){return r>0?i/r:0}
+function period(){
+ if(S.dateFrom&&S.dateTo)return 'Reporting period: '+fmtD(S.dateFrom)+' – '+fmtD(S.dateTo);
+ if(S.dateFrom||S.dateTo)return 'Date: '+fmtD(S.dateFrom||S.dateTo);
+ return 'No date entered';
+}
+function fmtD2(s){if(!s)return '';var p=s.split('-');if(p.length!==3)return s;var m=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];return m[+p[1]-1]+' '+ +p[2]+', '+p[0]}
+function period2(){
+ if(S.dateFrom&&S.dateTo)return fmtD2(S.dateFrom)+' – '+fmtD2(S.dateTo);
+ if(S.dateFrom||S.dateTo)return fmtD2(S.dateFrom||S.dateTo);
+ return 'No date entered';
+}
+function reportHTML(){
+ var tr=0,ti=0,ts=0,body='',attrSet={},attrFirst='';
+ S.rows.forEach(function(r){var a=n(r.reach),b=n(r.impr),c=n(r.spent),at=r.attribution||'Multiple attribution settings';tr+=a;ti+=b;ts+=c;attrSet[at]=1;if(!attrFirst)attrFirst=at;
+  body+='<tr><td>'+fmtN(a)+'</td><td>'+fmtN(b)+'</td><td>'+fmtF(freq(b,a))+'</td><td>'+fmtM(c)+'</td><td>'+esc(at)+'</td></tr>'});
+ var attrTotal=Object.keys(attrSet).length<=1?attrFirst:'Multiple attribution settings';
+ var cw=function(i,def){return 'width:'+(colWidths[i]||def)+'px'};
+ return '<div class="card"><div class="mdaterow"><button class="mbtn2" id="dlbtn" title="Tải xuống CSV">⬇</button><span class="mdate2">🗓 '+esc(period2())+'</span></div>'+
+ '<div class="sc"><table class="mtable2"><colgroup><col style="'+cw(0,140)+'"><col style="'+cw(1,140)+'"><col style="'+cw(2,110)+'"><col style="'+cw(3,140)+'"><col style="'+(colWidths[4]?('width:'+colWidths[4]+'px'):'')+'"></colgroup><thead><tr>'+
+ '<th><span class="ic">⋮</span>Reach<span class="rsz" data-i="0"></span></th>'+
+ '<th><span class="ic">⋮</span>Impressions<span class="rsz" data-i="1"></span></th>'+
+ '<th><span class="ic">⋮</span>Frequency<span class="rsz" data-i="2"></span></th>'+
+ '<th><span class="ic">⋮</span>Amount spent<span class="rsz" data-i="3"></span></th>'+
+ '<th><span class="ic">⋮</span>Attribution setting<span class="rsz" data-i="4"></span></th>'+
+ '</tr></thead><tbody>'+body+'</tbody>'+
+ '<tfoot><tr>'+
+ '<td><span class="mtotal-n">'+fmtN(tr)+'</span><span class="mtotal-s">Meta Accounts</span></td>'+
+ '<td><span class="mtotal-n">'+fmtN(ti)+'</span><span class="mtotal-s">Total</span></td>'+
+ '<td><span class="mtotal-n">'+fmtF(freq(ti,tr))+'</span><span class="mtotal-s">Per Meta Account</span></td>'+
+ '<td><span class="mtotal-n">'+fmtM(ts)+'</span><span class="mtotal-s">Total spent</span></td>'+
+ '<td class="mtotal-a">'+esc(attrTotal)+'</td>'+
+ '</tr></tfoot></table></div></div>';
+}
+function initResize(){
+ var rep=document.getElementById('rep');if(!rep)return;
+ rep.querySelectorAll('.rsz').forEach(function(h){
+  h.addEventListener('pointerdown',function(ev){
+   ev.preventDefault();
+   var idx=+h.dataset.i,startX=ev.clientX,th=h.parentElement,startW=th.offsetWidth;
+   try{h.setPointerCapture(ev.pointerId)}catch(e){}
+   function mv(e2){var w=Math.max(50,startW+(e2.clientX-startX));colWidths[idx]=w;var col=rep.querySelectorAll('.mtable2 colgroup col')[idx];if(col)col.style.width=w+'px'}
+   function up(){document.removeEventListener('pointermove',mv);document.removeEventListener('pointerup',up)}
+   document.addEventListener('pointermove',mv);document.addEventListener('pointerup',up);
+  });
+ });
+}
+function csvEsc(v){v=String(v);return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v}
+async function downloadCSV(){
+ var head=['Row','Reach','Impressions','Frequency','Amount spent','Attribution setting'],rowsC=[],tr=0,ti=0,ts=0,attrSet={},attrFirst='';
+ S.rows.forEach(function(r,i){var a=n(r.reach),b=n(r.impr),c=n(r.spent),at=r.attribution||'Multiple attribution settings';tr+=a;ti+=b;ts+=c;attrSet[at]=1;if(!attrFirst)attrFirst=at;rowsC.push([i+1,a,b,freq(b,a).toFixed(2),c.toFixed(2),at])});
+ var attrTotal=Object.keys(attrSet).length<=1?attrFirst:'Multiple attribution settings';
+ rowsC.push(['Total',tr,ti,freq(ti,tr).toFixed(2),ts.toFixed(2),attrTotal]);
+ var csv=[head].concat(rowsC).map(function(r){return r.map(csvEsc).join(',')}).join('\r\n');
+ var blob=new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8'});
+ var fname=((S.title||'bao-cao').replace(/[^\w\- ]+/g,'').trim()||'bao-cao')+'.csv';
+ if(dlcap){try{await dlcap.save({filename:fname,data:blob});return}catch(e){}}
+ var url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=fname;document.body.appendChild(a);a.click();a.remove();
+}
+function drawReport(){persist();document.getElementById('rep').innerHTML=reportHTML();initResize();var db=document.getElementById('dlbtn');if(db)db.onclick=downloadCSV}
+function rowsEditor(){
+ return S.rows.map(function(r,i){return '<div class="erow" data-i="'+i+'">'+
+ '<div><label>Chiến dịch</label><input data-k="name" value="'+esc(r.name)+'"></div>'+
+ '<div><label>Reach</label><input data-k="reach" type="number" min="0" value="'+esc(r.reach)+'"></div>'+
+ '<div><label>Impressions</label><input data-k="impr" type="number" min="0" value="'+esc(r.impr)+'"></div>'+
+ '<div><label>Amount spent</label><input data-k="spent" type="number" min="0" step="0.01" value="'+esc(r.spent)+'"></div>'+
+ '<div><label>Attribution setting</label><input data-k="attribution" value="'+esc(r.attribution||'Multiple attribution settings')+'"></div>'+
+ '<button data-del="'+i+'" title="Xóa dòng">✕</button></div>'}).join('');
+}
+function drawEditor(){
+ var el=document.getElementById('ed');
+ el.innerHTML='<h2>✏️ Nhập liệu báo cáo (bản v6)</h2>'+
+ '<div class="grid"><div><label>Tiêu đề báo cáo</label><input id="f-title" value="'+esc(S.title)+'"></div>'+
+ '<div><label>Từ ngày</label><input id="f-from" type="date" value="'+esc(S.dateFrom)+'"></div>'+
+ '<div><label>Đến ngày</label><input id="f-to" type="date" value="'+esc(S.dateTo)+'"></div>'+
+ '<div><label>Đơn vị tiền</label><select id="f-cur"><option value="VND"'+(S.currency==='VND'?' selected':'')+'>VND (₫)</option><option value="USD"'+(S.currency==='USD'?' selected':'')+'>USD ($)</option></select></div></div>'+
+ '<h2 style="margin-top:18px">Số liệu theo chiến dịch</h2><div id="rows">'+rowsEditor()+'</div>'+
+ '<div class="bar"><button id="add">＋ Thêm dòng</button><button id="dj">📦 Dữ liệu JSON</button>'+(STANDALONE?'<button class="pri" id="ex">⬇ Tải file báo cáo (HTML)</button>':'')+'<button class="pri" id="pub">🌐 Lưu &amp; xuất URL</button><span class="note" id="msg">Frequency tự tính = Impressions ÷ Reach.</span></div>';
+ el.querySelector('#f-title').oninput=function(e){S.title=e.target.value;drawReport()};
+ el.querySelector('#f-from').oninput=function(e){S.dateFrom=e.target.value;drawReport()};
+ el.querySelector('#f-to').oninput=function(e){S.dateTo=e.target.value;drawReport()};
+ el.querySelector('#f-cur').onchange=function(e){S.currency=e.target.value;drawReport()};
+ el.querySelector('#rows').oninput=function(e){var row=e.target.closest('.erow');if(!row)return;S.rows[+row.dataset.i][e.target.dataset.k]=e.target.value;drawReport()};
+ el.querySelector('#rows').onclick=function(e){var d=e.target.getAttribute('data-del');if(d==null)return;S.rows.splice(+d,1);drawEditor();drawReport()};
+ el.querySelector('#add').onclick=function(){S.rows.push({name:'',reach:0,impr:0,spent:0,attribution:'Multiple attribution settings'});drawEditor();drawReport()};
+ el.querySelector('#pub').onclick=publish;el.querySelector('#dj').onclick=showData;var ex=el.querySelector('#ex');if(ex)ex.onclick=exportView;
+}
+function modal(h){var o=document.createElement('div');o.className='ov';o.innerHTML='<div class="md">'+h+'</div>';o.onclick=function(e){if(e.target===o||e.target.hasAttribute('data-x'))o.remove()};document.body.appendChild(o);return o}
+function doCopy(inp,btn){inp.select();var ok=false;try{ok=document.execCommand('copy')}catch(e){}try{if(navigator.clipboard){navigator.clipboard.writeText(inp.value);ok=true}}catch(e){}btn.textContent=ok?'Đã sao chép ✓':'Nhấn Ctrl+C để sao chép'}
+function showShare(){
+ var o=modal('<h2>🌐 Đường dẫn báo cáo</h2><p class="note">'+(STANDALONE?'Đã lưu dữ liệu trên máy. Link báo cáo online:':'Đã lưu và xuất báo cáo! Gửi link này cho mọi người:')+'</p>'+
+ '<div class="bar" style="margin-top:0"><input id="lk" readonly value="'+ARTURL+'" style="flex:1;min-width:200px"><button class="pri" id="cp">Sao chép</button></div>'+
+ '<p class="note">⚠️ Để người khác xem được, hãy bấm nút <b>Chia sẻ (Share)</b> ở thanh trên cùng của trang báo cáo online và cho phép xem bằng liên kết.'+(STANDALONE?' Muốn cập nhật số liệu lên link này: mở bản online, bấm “📦 Dữ liệu JSON”, dán dữ liệu rồi bấm “Lưu &amp; xuất URL”.':'')+'</p>'+
+ '<div class="bar"><a class="btn" href="'+ARTURL+'" target="_blank" rel="noopener">Mở link</a>'+(STANDALONE?'<button id="cj2">Sao chép dữ liệu JSON</button>':'')+'<button data-x>Đóng</button></div>');
+ var i=o.querySelector('#lk');i.onclick=function(){i.select()};o.querySelector('#cp').onclick=function(e){doCopy(i,e.target)};
+ var c=o.querySelector('#cj2');if(c)c.onclick=function(){showData()};
+}
+function showData(){
+ var o=modal('<h2>📦 Dữ liệu (JSON)</h2><p class="note">Sao chép để chuyển dữ liệu giữa bản online và bản trên PC, hoặc dán dữ liệu vào rồi bấm Áp dụng.</p><textarea id="js" rows="10" style="width:100%">'+esc(JSON.stringify(S,null,1))+'</textarea><div class="bar"><button class="pri" id="ap">Áp dụng</button><button id="cj">Sao chép</button><button data-x>Đóng</button><span class="note" id="jm"></span></div>');
+ var t=o.querySelector('#js');
+ o.querySelector('#cj').onclick=function(e){doCopy(t,e.target)};
+ o.querySelector('#ap').onclick=function(){try{var d=JSON.parse(t.value);if(!d||!Array.isArray(d.rows))throw 0;S=d;render();o.remove()}catch(e){o.querySelector('#jm').textContent='Dữ liệu không hợp lệ.'}};
+}
+function exportView(){
+ var c=document.documentElement.cloneNode(true);
+ c.querySelector('#root').innerHTML='';
+ c.querySelector('#data').textContent=JSON.stringify(S).replace(/</g,'\\u003c');
+ var sc=c.querySelectorAll('script'),js=sc[sc.length-1];
+ js.textContent=js.textContent.replace('STANDALONE=true','STANDALONE=false').replace('VIEWERONLY=false','VIEWERONLY=true');
+ var b=new Blob(['<!doctype html>\n'+c.outerHTML],{type:'text/html'});
+ var l=document.createElement('a');l.href=URL.createObjectURL(b);l.download='index.html';document.body.appendChild(l);l.click();l.remove();
+ document.getElementById('msg').textContent='Đã tải file index.html (chỉ xem). Đưa file này lên hosting để có URL công khai.';
+}
+async function publish(){
+ var msg=document.getElementById('msg');
+ if(STANDALONE){persist();showShare();return}
+ if(!art){msg.textContent='Không thể lưu ở chế độ này.';return}
+ try{sessionStorage.setItem('showShare','1')}catch(e){msg.textContent='Đang lưu… Link báo cáo: '+ARTURL}
+ var clone=document.documentElement.cloneNode(true);
+ clone.querySelector('#root').innerHTML='';
+ clone.querySelector('#data').textContent=JSON.stringify(S).replace(/</g,'\\u003c');
+ msg.textContent='Đang lưu…';
+ try{await art.publish('<!doctype html>\n'+clone.outerHTML)}catch(err){try{sessionStorage.removeItem('showShare')}catch(e2){}msg.textContent=(err&&err.code==='conflict')?'Có phiên bản mới hơn, trang sẽ tải lại.':'Lưu thất bại: '+((err&&err.message)||'lỗi không rõ')}
+}
+function render(){
+ root.innerHTML=(canEdit?'<div class="card" id="ed"></div>':'')+'<div id="rep"></div>'+
+  (canEdit?'<p class="note">Người xem chỉ thấy phần báo cáo bên trên. Sau khi bấm “Lưu &amp; xuất URL”, dùng nút Chia sẻ của trang để lấy liên kết.</p>':'');
+ if(canEdit)drawEditor();
+ drawReport();
+}
+render();
+if(STANDALONE){canEdit=true;render();return}
+(async function(){
+ try{
+  if(!window.claude)return;
+  dlcap=await claude.use('downloads');
+  if(VIEWERONLY){render();return}
+  art=await claude.use('artifact');
+  var u=await claude.use('user');
+  canEdit=!!(art&&u&&u.isOwner());
+  render();
+  if(canEdit){try{if(sessionStorage.getItem('showShare')){sessionStorage.removeItem('showShare');showShare()}}catch(e){}}
+ }catch(e){}
+})();
+})();
+</script>
+
+
+</body></html>
